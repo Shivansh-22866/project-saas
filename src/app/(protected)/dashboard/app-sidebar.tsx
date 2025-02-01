@@ -1,7 +1,11 @@
 'use client'
 
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarTrigger } from "@/components/ui/sidebar"
-import { Bot, LayoutDashboard, Presentation } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
+import { cn } from "@/lib/utils"
+import { Bot, Globe2Icon, LayoutDashboard, Plus, Presentation } from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 
 const items = [
@@ -21,17 +25,42 @@ const items = [
         icon: Presentation
     },
     {
-        title: "Dashboard",
-        url: "/dashboard",
+        title: "Billing",
+        url: "/billing",
         icon: LayoutDashboard
     },
 ]
 
+const projects = [
+    {
+        name: 'Project 1'
+    },
+    {
+        name: 'Project 2'
+    },
+    {
+        name: 'Project 3'
+    },
+    
+]
+
 export function AppSidebar() {
+    const pathName = usePathname()
+    const {open} = useSidebar()
     return (
         <Sidebar collapsible="icon" variant="floating">
             <SidebarHeader>
-                Logo
+                <div className="flex items-center gap-2">
+                    <div>
+                        <Globe2Icon/>
+                    </div>
+                    {open && (
+                        <h1 className="font-bold text-primary/80 text-sm">
+                        Collaborate Sphere
+                    </h1>
+                    )}
+                    
+                </div>
             </SidebarHeader>
 
             <SidebarContent>
@@ -40,7 +69,59 @@ export function AppSidebar() {
                         Application
                     </SidebarGroupLabel>
                     <SidebarGroupContent>
+                        <SidebarMenu>
+                        {items.map((item) => (
+                            <SidebarMenuItem key={item.title}>
+                                <SidebarMenuButton asChild>
+                                    <Link href={item.url} className={cn({'!bg-primary !text-white': pathName === item.url}, "list-none")}>
+                                        <item.icon/>
+                                        <span>{item.title}</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        ))}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
 
+                <SidebarGroup>
+                    <SidebarGroupLabel>
+                        Your projects
+                    </SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            {projects.map((item) => (
+                                <SidebarMenuItem key={item.name}>
+                                    <SidebarMenuButton asChild>
+                                        <div>
+                                            <div className={cn("rounded-sm border size-6 flex shrink-0 items-center justify-center text-sm bg-white text-primary",
+                                                {
+                                                    'bg-primary text-white' : true
+                                                }
+                                            )}>
+                                                {item.name[0]}
+                                            </div>
+                                            <span>{item.name}</span>
+                                        </div>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
+
+                            <div className="h-2">
+
+                            </div>
+                            {open && (
+                                                            <SidebarMenuItem>
+                                                            <Link href={"/create"}>
+                                                            <Button size="sm" variant={'outline'} className="w-fit">
+                                                            <Plus className="mr-2 h-4 w-4" />
+                                                            New Project
+                                                        </Button>
+                                                            </Link>
+                                                        </SidebarMenuItem>
+                            )}
+                            
+                        </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
