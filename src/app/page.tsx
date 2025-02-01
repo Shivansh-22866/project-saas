@@ -9,7 +9,7 @@ export default async function Home() {
   void api.post.getLatest.prefetch();
 
   return (
-    <h1 className="text-red-500">
+    <h1 className="text-red-500 text-5xl">
       Hello
     </h1>
   );
