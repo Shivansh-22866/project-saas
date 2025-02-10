@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
+import useProject from "@/hooks/use-project"
 import { cn } from "@/lib/utils"
 import { Bot, Globe2Icon, LayoutDashboard, Plus, Presentation } from "lucide-react"
 import Link from "next/link"
@@ -31,22 +32,12 @@ const items = [
     },
 ]
 
-const projects = [
-    {
-        name: 'Project 1'
-    },
-    {
-        name: 'Project 2'
-    },
-    {
-        name: 'Project 3'
-    },
-    
-]
+
 
 export function AppSidebar() {
     const pathName = usePathname()
     const {open} = useSidebar()
+    const {projects, projectId, setProjectId} = useProject()
     return (
         <Sidebar collapsible="icon" variant="floating">
             <SidebarHeader>
@@ -90,13 +81,15 @@ export function AppSidebar() {
                     </SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {projects.map((item) => (
+                            {projects?.map((item) => (
                                 <SidebarMenuItem key={item.name}>
                                     <SidebarMenuButton asChild>
-                                        <div>
+                                        <div onClick={() => {
+                                            setProjectId(item.id)
+                                        }}>
                                             <div className={cn("rounded-sm border size-6 flex shrink-0 items-center justify-center text-sm bg-white text-primary",
                                                 {
-                                                    'bg-primary text-white' : true
+                                                    'bg-primary text-white' : item.id === projectId
                                                 }
                                             )}>
                                                 {item.name[0]}
